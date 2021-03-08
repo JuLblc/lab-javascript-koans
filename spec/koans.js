@@ -696,24 +696,33 @@ describe('the JavaScript language', () => {
 
         feed();
 
-        // expect(window.kilos).toEqual(11);
-        // expect(cat.kilos).toEqual(1);
+        expect(window.kilos).toEqual(11);
+        expect(cat.kilos).toEqual(1);
       });
 
       it('can be bound explicitly with CALL and APPLY', () => {
         const feed = cat.feed;
         feed.apply(cat);
 
-        //expect(cat.kilos).toEqual();
+        window.kilos = 10;
+        feed.apply(window);
+
+        expect(cat.kilos).toEqual(2);
+        expect(window.kilos).toEqual(11);
       });
 
       it('can be bound in modern browsers with BIND', () => {
         const feed = cat.feed;
-        const bound = feed.bind(cat);
+        const boundCat = feed.bind(cat);
+        const boundWindow = feed.bind(window);
 
-        bound();
+        window.kilos = 10;
 
-        //expect(cat.kilos).toEqual();
+        boundCat();
+        boundWindow();
+
+        expect(cat.kilos).toEqual(2);
+        expect(window.kilos).toEqual(11);
       });
 
       it('works different when function is attached to other object', () => {
@@ -722,8 +731,8 @@ describe('the JavaScript language', () => {
         otherCat.feed = cat.feed;
 
         otherCat.feed();
-        // expect(otherCat.kilos).toEqual(11);
-        // expect(cat.kilos).toEqual();
+        expect(otherCat.kilos).toEqual(11);
+        expect(cat.kilos).toEqual(1);
       });
 
       it('can be handled using the SELF trick', () => {
@@ -732,7 +741,7 @@ describe('the JavaScript language', () => {
 
         lion.hunt();
 
-        //expect(lion.energy).toEqual();
+        expect(lion.energy).toEqual(185);
       });
 
       it('interprets the THIS when the function is executed', () => {
@@ -744,7 +753,7 @@ describe('the JavaScript language', () => {
         };
         lion.hunt();
 
-        //expect(lion.energy).toEqual();
+        expect(lion.energy).toEqual(4000);
       });
     });
   });
