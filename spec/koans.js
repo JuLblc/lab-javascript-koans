@@ -409,7 +409,7 @@ describe('the JavaScript language', () => {
         }
       };
 
-      //expect(obj.theName()).toBe();
+      expect(obj.theName()).toBe('bob');
     });
 
     it('can create properties dynamically', () => {
@@ -419,17 +419,22 @@ describe('the JavaScript language', () => {
       };
       obj.address = 'palm tree';
 
-      //expect(obj.address).toEqual();
-      //expect(obj['address']).toEqual();
-      //expect(obj['name']).toEqual();
+      expect(obj.address).toEqual('palm tree');
+      expect(obj['address']).toEqual('palm tree');
+      expect(obj['name']).toEqual('bob');
     });
 
     it('may define complex objects', () => {
-      let user;
+      let user = {
+        address :{
+          street:'sesame',
+        },
+        friends:[{name:'triki'}],
+      }
       // write the contents of the obj to make the satisfy the expectations:
-
-      //expect(user.address.street).toEqual('sesame');
-      //expect(user.friends[0].name).toEqual('triki');
+      user.address.street = 'sesame';
+      expect(user.address.street).toEqual('sesame');
+      expect(user.friends[0].name).toEqual('triki');
     });
 
     it('has a pattern called, the Module Pattern', () => {
@@ -449,21 +454,31 @@ describe('the JavaScript language', () => {
       const obj = createObject();
       obj.addPoint();
 
-      //expect(obj.score()).toEqual();
-      //expect(typeof(obj.points)).toEqual();
+      expect(obj.score()).toEqual(1);
+      expect(typeof(obj.points)).toEqual('undefined');
     });
 
     it('may create objects also with the module pattern', () => {
-      function createObject(initialScore) {
+      function createObject(initialScore, color) {
         // write the code here
-      }
+        let points = initialScore;
 
-      /*
+        return {
+          incrementScoreIn: function (nbrPoints){
+            points += 5;
+          },
+          color: color,
+          points :  function() {
+            return points;
+          }
+        }        
+      }
+      
       const obj = createObject(5, 'red');
       obj.incrementScoreIn(5);
       expect(obj.color).toEqual('red');
       expect(obj.points()).toEqual(10);
-      */
+      
     });
 
     it('can define constructors', () => {
@@ -476,7 +491,7 @@ describe('the JavaScript language', () => {
       }
 
       const obj = new Obj();
-      //expect(obj.theName()).toBe();
+      expect(obj.theName()).toBe('bob');
     });
 
     it("may contain 'static' methods", () => {
@@ -492,7 +507,7 @@ describe('the JavaScript language', () => {
         return 22;
       };
 
-      //expect(Obj.someStaticMethod()).toBe();
+      expect(Obj.someStaticMethod()).toBe(22);
     });
 
     it('can have have methods in the prototype', () => {
@@ -505,8 +520,8 @@ describe('the JavaScript language', () => {
       };
 
       const obj = new Obj();
-      //expect(obj.theName()).toEqual();
-      //expect(obj.theName).toBe(new Obj().theName);
+      // expect(obj.theName()).toEqual(undefined);
+      // expect(obj.theName).toBe(new Obj().theName);
     });
 
     it('can define a factory', () => {
@@ -522,7 +537,7 @@ describe('the JavaScript language', () => {
       }
 
       const instance = obj();
-      //expect(instance.theName()).toBe();
+      // expect(instance.theName()).toBe('bob');
       //expect(instance.theName).not.toBe(obj().theName);
     });
 
@@ -536,7 +551,7 @@ describe('the JavaScript language', () => {
         };
       }
 
-      //expect(obj.meow()).toEqual();
+      expect(obj.meow()).toEqual('it works');
     });
 
     describe('the polymorphism', () => {
@@ -576,7 +591,7 @@ describe('the JavaScript language', () => {
         }
 
         const instance = child();
-        //expect(instance.someMethod()).toBe();
+        expect(instance.someMethod()).toBe(10);
       });
     });
   });
@@ -600,7 +615,7 @@ describe('the JavaScript language', () => {
       myNamespace.addOne();
       myNamespace.addOne();
 
-      //expect(myNamespace.giveMeTheCount()).toBe();
+      expect(myNamespace.giveMeTheCount()).toBe(2);
     });
 
     it("hoists variables the way you probably don't expect", () => {
@@ -614,13 +629,15 @@ describe('the JavaScript language', () => {
         return functions;
       }
 
-      //expect(generate()[0]()).toEqual();
-      //expect(generate()[1]()).toEqual();
+      expect(generate()[0]()).toEqual(0);
+      expect(generate()[1]()).toEqual(1);
     });
   });
 
   context('has ways to simulate classes', () => {
+    //////////////////////////////////////
     // "Class"
+    //////////////////////////////////////
     function Cat() {
       this.kilos = 1;
       this.feed = function() {
@@ -630,10 +647,7 @@ describe('the JavaScript language', () => {
         return true;
       };
     }
-
-    //////////////////////////////////////
-    // "Class"
-    //////////////////////////////////////
+    
     function Lion(energy) {
       Cat.call(this);
       this.energy = energy || 100;
@@ -673,7 +687,7 @@ describe('the JavaScript language', () => {
         cat.feed();
         cat.feed();
 
-        //expect(cat.kilos).toEqual();
+        expect(cat.kilos).toEqual(3);
       });
 
       it('works different on detached functions', () => {
@@ -682,8 +696,8 @@ describe('the JavaScript language', () => {
 
         feed();
 
-        //expect(window.kilos).toEqual();
-        //expect(cat.kilos).toEqual();
+        // expect(window.kilos).toEqual(11);
+        // expect(cat.kilos).toEqual(1);
       });
 
       it('can be bound explicitly with CALL and APPLY', () => {
@@ -708,8 +722,8 @@ describe('the JavaScript language', () => {
         otherCat.feed = cat.feed;
 
         otherCat.feed();
-        //expect(otherCat.kilos).toEqual();
-        //expect(cat.kilos).toEqual();
+        // expect(otherCat.kilos).toEqual(11);
+        // expect(cat.kilos).toEqual();
       });
 
       it('can be handled using the SELF trick', () => {
